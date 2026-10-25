@@ -16,6 +16,8 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 首页为 `/`，模板为 `/experiments/000-template/`。使用任意静态服务器均可，也可部署到 GitHub Pages 等静态托管服务。仓库尚未配置或发布线上站点。
 
+观影实验 003 需要拖动视频进度时，本地可改用 `python3 experiments/003-the-machine-dreams/serve.py --port 8000`；它同时提供整个陈列馆，并支持 MP4 分段请求。
+
 ## 创建实验
 
 复制 `experiments/000-template/` 为 `experiments/001-your-name/`（之后递增编号），修改其 HTML、CSS 和 JavaScript，再将条目加入根 `index.html` 并更新数量。每个文件夹都是独立入口，不需要打包器。模板自带一个约 20 秒的规则反转小实验，可自由替换。
@@ -26,6 +28,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
+- [`experiments/003-the-machine-dreams/`](experiments/003-the-machine-dreams/)：15 秒连续空间视觉短片，包含可直接播放的 MP4 和完整 HyperFrames 项目。
 - `ideas/inbox.md`：随手记录的念头。
 - `graveyard/`：失败作品的封存处；失败不是污点，无聊才是。
 - `AGENTS.md`：Codex 工作方式。

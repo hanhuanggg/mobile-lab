@@ -1,0 +1,17 @@
+node_modules/
+output/work-*/
+render-temp/**
+!render-temp/.gitkeep
+.hyperframes/
+.agents/
+.claude/
+scaffold/
+preview/first-pass/
+preview/second-pass/
+preview/final-stills/
+preview/all-frames/
+preview/*check-first*
+preview/doctor.json
+*.log
+__pycache__/
+.DS_Store

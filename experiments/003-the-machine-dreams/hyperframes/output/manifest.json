@@ -1,0 +1,16 @@
+{
+  "file": "output/THE_MACHINE_DREAMS.mp4",
+  "bytes": 36979103,
+  "sha256": "27fbb69aeaff3acddb657d1b8f9dd61f8ebe77993d556e0435cee01ca6d12563",
+  "duration_seconds": 15,
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 450,
+  "video_codec": "H.264",
+  "pixel_format": "yuv420p",
+  "audio_codec": "AAC",
+  "audio_channels": 2,
+  "hyperframes": "0.8.198",
+  "gsap": "3.15.0"
+}

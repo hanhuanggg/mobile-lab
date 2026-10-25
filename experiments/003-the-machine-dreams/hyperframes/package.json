@@ -1,0 +1,28 @@
+{
+  "name": "the-machine-dreams",
+  "version": "1.0.0",
+  "description": "A 15-second continuous generative motion film, made with HyperFrames and GSAP",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "sound": "python scripts/sound.py",
+    "dev": "node scripts/hyperframes.cjs preview --background --port 3002",
+    "stop": "node scripts/hyperframes.cjs preview --stop",
+    "check": "npm run build && node scripts/hyperframes.cjs check --json",
+    "snapshot": "node scripts/hyperframes.cjs snapshot --at 0,3.3,6.5,8,10.7,11.8,12.5,13.5,14.3 --no-end --output preview/final-stills",
+    "render": "npm run build && node scripts/hyperframes.cjs render --fps 30 --quality delivery --workers 2 --output output/THE_MACHINE_DREAMS.mp4",
+    "verify:seek": "node scripts/verify-seek.cjs",
+    "review:render": "python scripts/review-render.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "gsap": "3.15.0",
+    "hyperframes": "0.8.198"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
