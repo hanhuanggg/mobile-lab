@@ -19,7 +19,7 @@ npm run check
 npm run render
 ```
 
-预览地址：`http://localhost:3002/#project/the-machine-dreams`。`npm run dev` 启动持久化 HyperFrames Studio；可直接播放、拖动时间线。Linux 的 `/usr/bin/chromium` 会自动识别；其他环境可设置 `HYPERFRAMES_BROWSER_PATH`。
+预览地址以 `npm run dev` 打印的 Studio URL 为准（默认端口 3002）；本仓库中的项目目录为 `hyperframes/`。`npm run dev` 启动持久化 HyperFrames Studio；可直接播放、拖动时间线。Linux 的 `/usr/bin/chromium` 会自动识别；其他环境可设置 `HYPERFRAMES_BROWSER_PATH`。
 
 ```sh
 npm run snapshot
