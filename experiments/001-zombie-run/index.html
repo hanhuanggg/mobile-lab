@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171e21">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23d9fa65'/%3E%3Ctext x='5' y='25' font-size='27' font-weight='900'%3EZ%3C/text%3E%3C/svg%3E">
+  <title>Zombie Run · mobile-lab 001</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+<main id="game" aria-label="Zombie Run 竖屏动作游戏">
+  <canvas id="field" aria-label="战场：按住并左右滑动移动，自动攻击。也支持左右方向键或 A、D。"></canvas>
+  <div id="hud" class="hud" hidden>
+    <div class="topline"><span class="run-id">ZR / 001</span><span id="clock">00:00</span><button id="sound" class="icon" type="button" aria-label="关闭声音" aria-pressed="true">♪</button><button id="pause" class="icon" type="button" aria-label="暂停游戏">Ⅱ</button></div>
+    <div class="meters"><div class="health"><span id="hp-label">HP 100 / 100</span><div class="track"><i id="hp-fill"></i></div></div><span class="coins">✦ <b id="coins">0</b></span></div>
+    <div class="progress"><i id="progress-fill"></i><span id="phase">OUTBREAK / 突围</span><b>BOSS</b></div>
+  </div>
+  <div id="wave" class="wave" hidden><b id="wave-title"></b><span id="wave-hint"></span></div>
+  <div id="toast" class="toast" aria-live="polite"></div>
+  <div id="weapon" class="weapon" hidden><div><span id="weapon-name">PISTOL <small>LV.1</small></span><strong id="attack">ATK 10</strong></div><p id="mods">单发 · 自动瞄准</p></div>
+  <div id="swipe" class="swipe" hidden>← 按住任意位置，左右滑动 →</div>
+  <section id="intro" class="overlay intro">
+    <div class="edition">POCKET ARCADE <span>NO.001</span></div>
+    <h1>ZOMBIE<br><em>RUN<span>↗</span></em></h1>
+    <p class="tagline">从一把手枪，<br>杀成一台战争机器。</p>
+    <div class="intro-bottom"><div class="instructions"><span>↔ 左右滑动</span><span>自动开火 · 进门升级</span></div><button id="start" class="primary" type="button">开始突围 <span>→</span></button><p>一局约 3 分钟 · 无需安装 · 无广告</p><a href="../../">← 返回实验陈列馆</a></div>
+  </section>
+  <section id="pause-screen" class="overlay result" hidden><p class="eyebrow">TAKE A BREATH</p><h2>暂停。</h2><p>火力还在，等你回来。</p><button id="resume" class="primary" type="button">继续突围 →</button><a href="../../">返回陈列馆</a></section>
+  <section id="result" class="overlay result" hidden aria-live="polite"><p id="result-kicker" class="eyebrow">ROAD CLEARED</p><h2 id="result-title">VICTORY</h2><p id="result-copy">你真把那条路打穿了。</p><div class="receipt"><div><span id="reward-caption">本局金币</span><strong id="reward">0</strong></div><div><span>消灭 / 用时</span><strong id="record">0 / 00:00</strong></div><div><span>最终火力</span><strong id="final-weapon">PISTOL</strong></div><div><span>最佳战绩</span><strong id="best">0</strong></div></div><button id="restart" class="primary" type="button">再冲一局 <span>↗</span></button><a href="../../">← 返回陈列馆</a></section>
+</main>
+</body>
+</html>
