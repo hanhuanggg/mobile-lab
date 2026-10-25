@@ -1,0 +1,30 @@
+[
+  {
+    "path": "assets/praise.mp3",
+    "origin": "edge-tts",
+    "detail": "zh-CN-XiaoxiaoNeural, +8% rate, +3Hz pitch; generic voice",
+    "bytes": 12384,
+    "sha256": "0d2c53b773417d0a9aa229aee27d6bdfeb99713e3eaa22746b770f622cf0636a"
+  },
+  {
+    "path": "assets/deny.mp3",
+    "origin": "edge-tts",
+    "detail": "zh-CN-XiaoyiNeural, +12% rate, +35Hz pitch; generic voice",
+    "bytes": 13680,
+    "sha256": "eac15ff143b8959bebfa15b2a4f1d0eb72716aea5bdc0c32992c4f78df33a25b"
+  },
+  {
+    "path": "assets/performance.wav",
+    "origin": "scripts/sound.py",
+    "detail": "Original deterministic foley synthesis and voice mix; 48kHz stereo",
+    "bytes": 2880044,
+    "sha256": "38a9b705713b0d6fc14edfbec1742e340fc50397bed1f2e0ddc154dc77bf8c5d"
+  },
+  {
+    "path": "assets/fonts/Dialogue.otf",
+    "origin": "Noto Sans CJK",
+    "detail": "Subset of installed Noto Sans CJK; license in NOTO-LICENSE.txt",
+    "bytes": 7872,
+    "sha256": "d1f83954612347a9176b7bf72813e74b63f58619664c23769d2f2633c8120708"
+  }
+]

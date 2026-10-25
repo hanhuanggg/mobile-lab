@@ -1,0 +1,18 @@
+{
+  "file": "output/CHOPPER_NOT_HAPPY.mp4",
+  "title": "才没有高兴呢！ / CHOPPER",
+  "bytes": 17729772,
+  "sha256": "a241604b93590a8041efe871780a949d97097a50f9603cd6fd21bf702d2a93cd",
+  "duration_seconds": 15,
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 450,
+  "video_codec": "H.264",
+  "pixel_format": "yuv420p",
+  "audio_codec": "AAC",
+  "audio_channels": 2,
+  "hyperframes": "0.8.198",
+  "gsap": "3.15.0",
+  "three": "0.186.1"
+}

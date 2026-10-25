@@ -29,6 +29,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
 - [`experiments/003-the-machine-dreams/`](experiments/003-the-machine-dreams/)：15 秒连续空间视觉短片，包含可直接播放的 MP4 和完整 HyperFrames 项目。
+- [`experiments/004-chopper-not-happy/`](experiments/004-chopper-not-happy/)：乔巴《才没有高兴呢！》15 秒原创三维同人短片，含中文对白、MP4 和完整制作源码。
 - `ideas/inbox.md`：随手记录的念头。
 - `graveyard/`：失败作品的封存处；失败不是污点，无聊才是。
 - `AGENTS.md`：Codex 工作方式。

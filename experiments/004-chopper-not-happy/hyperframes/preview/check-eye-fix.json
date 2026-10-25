@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "duration": 15,
+    "samples": [
+      11.878,
+      12.033,
+      12.189,
+      12.344,
+      12.5,
+      12.656,
+      12.811,
+      12.967,
+      13.122
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 0,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      11.878,
+      12.189,
+      12.5,
+      12.811,
+      13.122
+    ],
+    "checked": 0,
+    "passed": 0
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "step": 0,
+    "samples": 0
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  },
+  "scope": {
+    "range": [
+      11.8,
+      13.2
+    ],
+    "hiddenFindings": 0,
+    "notes": [
+      "Static lint and unscoped runtime failures remain project-wide.",
+      "Whole-timeline motion assertions, frozen-sweep detection and craft warnings are skipped for range checks."
+    ]
+  },
+  "saved": {
+    "id": "38d5e627-89b5-419b-9425-4fbc120dcc1c",
+    "revision": null,
+    "report": "/workspace/mobile-lab/experiments/004-chopper-not-happy/hyperframes/.hyperframes/artifacts/checks/38d5e627-89b5-419b-9425-4fbc120dcc1c.json",
+    "attribution": "inputs-changed"
+  },
+  "_meta": {
+    "version": "0.8.198",
+    "updateAvailable": false
+  }
+}

@@ -1,0 +1,5 @@
+Three.js 0.186.1 — MIT license, see THREE-LICENSE.txt.
+GSAP 3.15.0 — Copyright 2026 GreenSock, standard license:
+https://gsap.com/standard-license
+Original copyright headers are retained in the vendored JavaScript.
+Noto Sans CJK glyph subset — see assets/fonts/NOTO-LICENSE.txt.
