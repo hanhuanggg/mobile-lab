@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9dfcb">
+  <meta name="description" content="十四种原创异兽，七重存在层级。从肉身、血脉到法则与因果，一部具有完整生态和统一插图的东方奇幻古籍。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%239b3c2c'/%3E%3Ctext x='4' y='25' font-size='24' fill='%23efe6d3'%3E异%3C/text%3E%3C/svg%3E">
+  <title>异兽图鉴 · 七阶异录 — mobile-lab 002</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="content.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">跳至正文</a>
+<header class="masthead"><a href="../../" class="gallery-link">← 实验陈列馆</a><span>照夜司 · 藏本〇〇二</span><a href="#catalogue" id="top-catalogue">总目 ↗</a></header>
+<main id="main-content">
+  <div id="library">
+    <section class="cover" aria-labelledby="book-title">
+      <div class="cover-line"><span>异闻有据 · 观者自慎</span><span>卷一 / 十四种</span></div>
+      <div class="title-block"><p class="vertical-subtitle">七阶异录</p><h1 id="book-title">异兽图鉴</h1></div>
+      <img class="cover-beast" src="assets/07.webp" width="1024" height="1280" alt="负日玄鸢：古铜黑羽，七枚长尾翎，后颅骨环负着一轮黑色日影。" fetchpriority="high">
+      <div class="cover-note"><span class="seal" aria-label="照夜秘藏">照夜<br>秘藏</span><p>其初食血肉，<br>其后食天地，<br>终有食其所以为人者。</p></div>
+      <div class="cover-bottom"><a id="open-book" class="ink-link" href="#fulijing">开卷 <span>→</span></a><span>自肉身起，至因果止。</span></div>
+    </section>
+    <section class="preface" aria-labelledby="preface-title"><span class="margin-label">序 / PREFACE</span><h2 id="preface-title">越往深处，<br>越不像一种生物。</h2><p>本录以存在之法分七阶，不以杀力定高下。低阶仍可成灾，高阶亦有代价。读其形，须问其何以活；知其凶，更须问何以止。</p><a id="continue-reading" href="#fulijing" hidden></a></section>
+    <section id="catalogue" class="catalogue" aria-labelledby="catalogue-title" tabindex="-1">
+      <div class="section-heading"><span class="margin-label">总目 / CONTENTS</span><h2 id="catalogue-title">七阶，十四异。</h2></div>
+      <div class="find-tools"><label for="search">检索异闻<input id="search" type="search" placeholder="兽名、器官、栖地或能力" autocomplete="off"></label><label for="tier-filter">卷阶<select id="tier-filter"><option value="0">全部七阶</option></select></label></div>
+      <p id="result-count" class="result-count" role="status">共十四种，按阶收录。</p>
+      <div id="catalogue-list"></div>
+      <p id="empty" class="empty" hidden>此录未载。试着换一个关键词。</p>
+    </section>
+    <footer class="colophon"><span class="seal small" aria-hidden="true">异录</span><p>照夜司辑录 · 卷一<br>原创虚构世界 · 十四幅独立插图<br><a href="BOOK.md">完整文字底稿 ↗</a></p><p class="lab-mark">MOBILE-LAB / EXPERIMENT 002</p></footer>
+  </div>
+  <div id="reader" hidden>
+    <nav class="reader-tools" aria-label="阅读工具"><a href="#catalogue">← 总目</a><span id="page-marker"></span><button id="share" type="button">分享此页 ↗</button></nav>
+    <article id="entry"></article>
+    <nav id="page-turner" class="page-turner" aria-label="前后翻阅"></nav>
+    <p class="reader-footnote">照夜司辑录 · 所引古籍为本世界内虚构文献。<br><a href="#catalogue">归于总目</a> · <a href="../../">返回实验陈列馆</a></p>
+  </div>
+  <noscript><p class="no-script">图录翻阅需要 JavaScript。也可直接阅读 <a href="BOOK.md">完整图文底稿</a>。</p></noscript>
+</main>
+<dialog id="share-dialog"><form method="dialog"><h2>寄出这一页</h2><p>长按或选中下方地址即可复制。这个地址会直接打开当前异兽。</p><label for="share-url">此页地址</label><input id="share-url" type="text" readonly><button type="submit">收起</button></form></dialog>
+<div id="announcement" class="announcement" role="status"></div>
+</body>
+</html>
