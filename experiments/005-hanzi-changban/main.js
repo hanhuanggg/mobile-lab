@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id),canvas=$('board'),ctx=canvas.getContext(
 const nums=['壹','贰','叁','肆','伍','陆'],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let saved={stars:[0,0,0,0,0,0],sound:false};
 try{const p=JSON.parse(localStorage.getItem('changban-v1'));if(p&&Array.isArray(p.stars)){saved.stars=saved.stars.map((_,i)=>Math.max(0,Math.min(3,Number(p.stars[i])||0)));saved.sound=!!p.sound;}}catch{}
-let game,level=0,blueprint='bow',selected=null,obstacle=null,speed=1,pointer=null,hover=null,keyCell={x:2,y:2},keyMode=false,toastTimer,audio,selectionKey='',landscape=innerWidth>650,W,H;
+let game,level=0,blueprint='bow',selected=null,obstacle=null,speed=1,pointer=null,hover=null,keyCell={x:2,y:2},keyMode=false,toastTimer,audio,selectionKey='',strategyOpen=false,strategyWasPaused=false,landscape=innerWidth>650,W,H;
 function persist(){try{localStorage.setItem('changban-v1',JSON.stringify(saved));}catch{toast('浏览器未允许存档，本次仍可完整游玩');}}
 const unlocked=i=>i===0||saved.stars[i-1]>0;
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3300);}
@@ -22,9 +22,9 @@ function event(e){
 }
 function loadLevel(i){
  if(!unlocked(i)){toast('先守住前一关，再出发');return;}
- level=i;game=new Game(i,event);selected=null;obstacle=null;blueprint='bow';speed=1;pointer=null;
+ hideModal();level=i;game=new Game(i,event);selected=null;obstacle=null;blueprint='bow';speed=1;pointer=null;
  $('boardNote').style.display='';$('boardNote').innerHTML='<span>壹</span> 先选下方兵种，再点空地布阵';
- $('levelTitle').innerHTML=LEVELS[i].name+' <span>守住阿斗，便是胜局。</span>';$('levelTag').textContent='第'+nums[i]+'章 · '+LEVELS[i].tag;
+ $('levelTitle').innerHTML=LEVELS[i].name+' <span>守住阿斗，便是胜局。</span>';$('levelTag').textContent='第'+nums[i]+'章 · '+LEVELS[i].tag;$('chapters').textContent='关卡 '+nums[i];$('chapters').setAttribute('aria-label','选择关卡：'+LEVELS[i].name);
  $('tipText').textContent=['弓兵放在道路的内弯，一次布阵，就能守住前后两段。','别急着合成所有兵种。多一点覆盖，有时比一位强兵更有用。','快马将至，术士的寒霜能为整条防线争取时间。','盾兵能挡住普通箭矢，枪兵却能穿透它的护甲。','障碍下藏有军粮。先清空，再落字，化荒地为阵地。','赵云不只是强兵。危急时「舍将护主」，放弃他换取阿斗生机。'][i];
  hideModal();renderLevels();renderShop();ui(true);announce('第'+(i+1)+'关，'+LEVELS[i].name+'。请选择兵种布阵。');
 }
@@ -35,7 +35,8 @@ function renderLevels(){
 }
 function renderShop(){
  $('shop').innerHTML=['bow','spear','blade','frost'].map((k,i)=>{const t=TYPES[k];return '<button class="unit-card '+(blueprint===k?'selected':'')+'" data-type="'+k+'" aria-pressed="'+(blueprint===k)+'" style="--unit-color:'+t.color+'" aria-label="'+t.name+'，'+t.cost+'军粮，快捷键'+(i+1)+'"><span class="unit-glyph">'+t.glyph+'</span><span><b>'+t.name+'</b><small>'+['远程 · 点射','穿甲 · 强攻','近战 · 群伤','寒霜 · 减速'][i]+'</small><span class="price">◈ '+t.cost+'</span></span></button>';}).join('');
- $('shop').querySelectorAll('button').forEach(b=>b.onclick=()=>choose(b.dataset.type));
+ $('shop').insertAdjacentHTML('beforeend','<button id="inspect" class="inspect-btn" aria-label="打开军师：升级、撤回与召将">军师</button>');
+ $('shop').querySelectorAll('button[data-type]').forEach(b=>b.onclick=()=>choose(b.dataset.type));$('inspect').onclick=showStrategy;
 }
 function choose(type){if(game.over)return;blueprint=type;selected=null;obstacle=null;renderShop();ui(true);toast(type==='hero'?'选择空地，让赵云出阵':'已选'+TYPES[type].name+'，点击草地布阵');}
 function selectionHTML(){
@@ -47,24 +48,45 @@ function selectionHTML(){
 }
 function ui(force=false){
  if(!game)return;
+ if($('inspect')){$('inspect').textContent=selected?'兵策':obstacle?'清障':'军师';$('inspect').classList.toggle('has-selection',!!selected||!!obstacle);}
  $('gold').textContent=game.gold;$('lives').textContent=game.lives;
  $('waveText').textContent=game.wave===0?'布阵阶段':'第 '+game.wave+' / '+game.level.waves+' 波'+(game.active?' · 敌军来袭':' · 已守住');
  $('waveDots').innerHTML=Array.from({length:game.level.waves},(_,i)=>'<i class="'+(i<game.wave-1||i===game.wave-1&&!game.active?'done':i===game.wave-1?'now':'')+'"></i>').join('');
  $('wave').disabled=game.active||game.over||game.paused;
  $('wave').innerHTML=game.over?'战役结束':game.active?'剩余 '+(game.enemies.length+game.queue.length)+' 敌军':'开始第 '+(game.wave+1)+' 波 <span>→</span>';
  $('pause').textContent=game.paused?'▶':'Ⅱ';$('pause').disabled=game.over;$('pause').setAttribute('aria-label',game.paused?'继续游戏':'暂停游戏');$('speed').textContent=speed+'×';
- $('skill').disabled=game.skillCD>0||!game.active||game.paused||game.over;$('skillLabel').textContent=game.skillCD>0?Math.ceil(game.skillCD)+'秒后可用':'全场伤害 · 冻缓敌军';
+ $('skill').disabled=game.skillCD>0||!game.active||game.paused||game.over;$('skillLabel').textContent=game.skillCD>0?Math.ceil(game.skillCD)+'秒后可用':'全场伤害 · 冻缓敌军';$('skill').querySelector('span').textContent=game.skillCD>0?Math.ceil(game.skillCD):'霜';$('skill').setAttribute('aria-label','寒霜令：'+$('skillLabel').textContent);
  for(const key of ['zhao','yun']){$(key).classList.toggle('collected',game.fragments[key]>0);$(key).querySelector('small').textContent=game.fragments[key]?'已获得 ×'+game.fragments[key]:key==='zhao'?'第2波获得':'第4波获得';}
  const ready=game.fragments.zhao>0&&game.fragments.yun>0;$('summon').disabled=!ready||game.over;$('summon').textContent=ready?'二字成将 · 召唤赵云':'集齐字牌后召唤';
  $('sound').textContent=saved.sound?'♫':'♪';$('sound').setAttribute('aria-label',saved.sound?'关闭音效':'开启音效');$('sound').title=saved.sound?'关闭音效':'开启音效';
  const key=[selected,obstacle?.x,obstacle?.y,blueprint,game.gold,game.over,game.active,game.towers.find(t=>t.id===selected)?.level].join('/');
  if(force||key!==selectionKey){selectionKey=key;const activeId=document.activeElement?.id;$('selection').innerHTML=selectionHTML();
  if($('upgrade'))$('upgrade').onclick=()=>{game.upgrade(selected);ui(true);};
- if($('sell'))$('sell').onclick=()=>{const t=game.towers.find(t=>t.id===selected);if(t?.type==='hero')confirmAction(()=>{game.sacrifice(selected);selected=null;ui(true);},'赵云将离开战场，换来阿斗恢复2命、敌军后退与全场伤害。','舍将护主');else{game.sell(selected);selected=null;ui(true);}};
- if($('clearObstacle'))$('clearObstacle').onclick=()=>{game.clear(obstacle.x,obstacle.y);obstacle=null;ui(true);toast('补给已找到！净获得15军粮');};
+ if($('sell'))$('sell').onclick=()=>{const t=game.towers.find(t=>t.id===selected);if(t?.type==='hero'){hideModal();confirmAction(()=>{game.sacrifice(selected);selected=null;ui(true);},'赵云将离开战场，换来阿斗恢复2命、敌军后退与全场伤害。','舍将护主');}else{game.sell(selected);selected=null;ui(true);hideModal();ui();}};
+ if($('clearObstacle'))$('clearObstacle').onclick=()=>{game.clear(obstacle.x,obstacle.y);obstacle=null;ui(true);hideModal();ui();toast('补给已找到！净获得15军粮');};
  if(['upgrade','sell','clearObstacle'].includes(activeId)&&$(activeId))$(activeId).focus({preventScroll:true});}
 }
-function hideModal(){if(modal.open)modal.close();}
+function restoreStrategy(){
+ if(!strategyOpen)return;
+ document.querySelector('.shell').appendChild($('strategyPanel'));strategyOpen=false;modal.classList.remove('strategy-view');if(game)game.paused=strategyWasPaused;
+}
+function hideModal(){restoreStrategy();if(modal.open)modal.close();}
+function showStrategy(){
+ if(landscape)return;
+ strategyWasPaused=game.paused;game.paused=true;ui(true);
+ openModal('<div class="drawer-heading"><h2>军师手札</h2><button id="closeStrategy">返回战场</button></div><div id="strategyMount"></div>');
+ strategyOpen=true;modal.classList.add('strategy-view');$('strategyMount').appendChild($('strategyPanel'));
+ $('closeStrategy').onclick=()=>{hideModal();ui();};modal.oncancel=()=>{restoreStrategy();ui();};
+}
+function showChapters(){
+ const paused=game.paused;game.paused=true;ui();
+ openModal('<div class="modal-tag">长坂行记 · '+saved.stars.reduce((a,b)=>a+b,0)+' / 18 ★</div><h2>选择关卡</h2><div class="chapter-choices">'+LEVELS.map((l,i)=>'<button data-chapter="'+i+'" '+(unlocked(i)?'':'disabled')+'>'+nums[i]+' · '+l.name+' <span>'+(saved.stars[i]?'★'.repeat(saved.stars[i]):unlocked(i)?'可挑战':'未解锁')+'</span></button>').join('')+'</div><div class="modal-actions"><button id="closeChapters">返回战场</button><button id="restartChapter">重整旗鼓</button></div><a class="gallery-link" href="../../">← 返回陈列馆</a>');
+ const close=()=>{hideModal();game.paused=paused;ui();};
+ $('closeChapters').onclick=close;modal.oncancel=()=>{game.paused=paused;ui();};
+ $('restartChapter').onclick=()=>{close();$('restart').click();};
+ modal.querySelectorAll('[data-chapter]').forEach(b=>b.onclick=()=>{const next=+b.dataset.chapter;close();if(next===level)return;if(game.wave>0&&!game.over)confirmAction(()=>loadLevel(next),'切换关卡会重新开始本关，通关星级会保留。','切换关卡');else loadLevel(next);});
+}
+modal.addEventListener('close',()=>{restoreStrategy();ui();});
 function openModal(html){$('modalBody').innerHTML=html;if(!modal.open)modal.showModal();}
 function confirmAction(action,text,title='重整旗鼓'){
  const paused=game.paused;game.paused=true;ui();
@@ -73,7 +95,7 @@ function confirmAction(action,text,title='重整旗鼓'){
 }
 function showHelp(){
  const paused=game.paused;game.paused=true;ui();
- openModal('<div class="modal-tag">一字一兵 · 一笔一城</div><h2>如何守住长坂</h2><ol><li>选兵种，再点草地布阵；道路不能放兵。</li><li>拖动同字同级兵种合成，最高四级。也可点选后升级、移动或撤回。</li><li>击败敌军获得军粮，清理灌木花20、得35。</li><li>点击「开始下一波」迎敌。寒霜令有24秒冷却。</li><li>第2、4波获得「赵」「云」，凑齐可在空地召将。危急时可舍将护主。</li><li>10命通关获三星，6—9命两星，其余一星；通关解锁下一关。</li></ol><p>键盘：1–4 选兵，方向键选格，Enter 落子，Q 寒霜，P 暂停，Esc 取消选择。后台自动暂停。</p><div class="modal-actions"><button id="closeHelp" class="primary">明白了 · 落字成军</button></div>');
+ openModal('<div class="modal-tag">一字一兵 · 一笔一城</div><h2>如何守住长坂</h2><ol><li>选兵种，再点草地布阵；道路不能放兵。</li><li>拖动同字同级兵种合成，最高四级。点选守军后，手机点「军师」升级或撤回；也可移动。</li><li>击败敌军获得军粮，清理灌木花20、得35。</li><li>点击「开始下一波」迎敌。寒霜令有24秒冷却。</li><li>第2、4波获得「赵」「云」，凑齐可在空地召将。危急时可舍将护主。</li><li>10命通关获三星，6—9命两星，其余一星；通关解锁下一关。</li></ol><p>键盘：1–4 选兵，方向键选格，Enter 落子，Q 寒霜，P 暂停，Esc 取消选择。后台自动暂停。</p><div class="modal-actions"><button id="closeHelp" class="primary">明白了 · 落字成军</button></div>');
  $('closeHelp').onclick=()=>{game.paused=paused;hideModal();ui();};modal.oncancel=()=>{game.paused=paused;ui();};
 }
 function showResult(r){
@@ -106,10 +128,17 @@ addEventListener('keydown',e=>{
  if(e.key==='Enter'||e.key===' '){e.preventDefault();act(keyCell);}
 });
 $('wave').onclick=()=>{if(!game.towers.length){toast('先布置至少一名守军，再迎战');return;}game.startWave();ui();};
-$('pause').onclick=pause;$('speed').onclick=()=>{speed=speed===1?2:1;ui();};$('skill').onclick=()=>{game.skill();ui();};$('summon').onclick=()=>choose('hero');$('help').onclick=showHelp;$('sound').onclick=()=>{saved.sound=!saved.sound;persist();tone(500);ui();};$('restart').onclick=()=>confirmAction(()=>loadLevel(level),'本关军粮、兵种和波次将重新开始，通关记录会保留。');
+$('pause').onclick=pause;$('speed').onclick=()=>{speed=speed===1?2:1;ui();};$('skill').onclick=()=>{game.skill();ui();};$('summon').onclick=()=>{hideModal();choose('hero');};$('chapters').onclick=showChapters;$('help').onclick=showHelp;$('sound').onclick=()=>{saved.sound=!saved.sound;persist();tone(500);ui();};$('restart').onclick=()=>confirmAction(()=>loadLevel(level),'本关军粮、兵种和波次将重新开始，通关记录会保留。');
 addEventListener('visibilitychange',()=>{if(document.hidden&&game&&!game.over){game.paused=true;ui();}});
-function resize(){landscape=innerWidth>650;W=landscape?576:384;H=landscape?384:576;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.aspectRatio=W+' / '+H;ctx.setTransform(dpr,0,0,dpr,0,0);}
-addEventListener('resize',resize);
+function resize(){if(innerWidth>650&&strategyOpen)hideModal();document.documentElement.style.setProperty('--viewport-height',(window.visualViewport?.height||innerHeight)+'px');landscape=innerWidth>650;W=landscape?576:384;H=landscape?384:576;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.aspectRatio=W+' / '+H;ctx.setTransform(dpr,0,0,dpr,0,0);fitCanvas();}
+function fitCanvas(){
+ if(landscape){canvas.style.width='';canvas.style.height='';return;}
+ const wrap=document.querySelector('.board-wrap');
+ const width=Math.floor(Math.min(wrap.clientWidth,wrap.clientHeight*W/H));
+ canvas.style.width=width+'px';canvas.style.height=width*H/W+'px';
+}
+addEventListener('resize',resize);window.visualViewport?.addEventListener('resize',resize);
+new ResizeObserver(fitCanvas).observe(document.querySelector('.board-wrap'));
 function rect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}}
 function text(s,x,y,size,color,sans=false){ctx.fillStyle=color;ctx.font=(sans?'':'600 ')+size+'px '+(sans?'system-ui':'"Songti SC",STSong,serif');ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
 function grass(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.strokeStyle='#96a77a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-6,4);ctx.lineTo(-3,-3);ctx.moveTo(0,5);ctx.lineTo(2,-5);ctx.moveTo(4,5);ctx.lineTo(7,0);ctx.stroke();ctx.restore();}

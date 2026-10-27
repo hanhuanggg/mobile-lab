@@ -14,9 +14,22 @@ def snap(page):return page.evaluate('window.Changban.snapshot()')
 def locate(page,x,y):
  c=page.locator('#board');c.scroll_into_view_if_needed();r=c.bounding_box();land=page.viewport_size['width']>650
  return (r['x']+(y+.5)*r['width']/9,r['y']+(x+.5)*r['height']/6) if land else (r['x']+(x+.5)*r['width']/6,r['y']+(y+.5)*r['height']/9)
+def close_strategy(page):
+ if page.locator('#closeStrategy').is_visible():page.locator('#closeStrategy').tap()
 def cell(page,x,y):
+ close_strategy(page)
  a,b=locate(page,x,y);page.touchscreen.tap(a,b)
-def click(page,selector):page.locator(selector).tap()
+def click(page,selector):
+ if selector=='#closeStrategy':page.locator(selector).tap();return
+ mobile=page.viewport_size['width']<=650
+ if mobile:
+  if selector in ['#upgrade','#sell','#clearObstacle','#summon']:
+   if not page.locator(selector).is_visible():page.locator('#inspect').tap()
+  else:close_strategy(page)
+  if selector=='#restart':
+   page.locator('#chapters').tap();page.locator('#restartChapter').tap();return
+  if selector=='.gallery-link':page.locator('#chapters').tap()
+ page.locator(selector+':visible').tap()
 def free(s):
  occupied={(t['x'],t['y']) for t in s['towers']}|{(o['x'],o['y']) for o in s['obstacles']}|set(PATH)
  return [(x,y) for y in range(9) for x in range(6) if (x,y) not in occupied]
@@ -41,23 +54,32 @@ def prep(page):
   if len(snap(page)['towers'])>=6:break
 with sync_playwright() as p:
  browser=p.chromium.launch(executable_path=os.getenv('CHROMIUM_PATH','/usr/bin/chromium'),headless=True,args=['--no-sandbox'])
- for w,h in [(320,740),(390,844),(1440,1000)]:
+ for w,h in [(320,600),(320,740),(390,620),(390,700),(390,844),(576,800),(1440,1000)]:
   context=browser.new_context(viewport={'width':w,'height':h},has_touch=True,device_scale_factor=1)
   page=context.new_page();page.on('pageerror',lambda e:report['errors'].append(str(e)))
   page.on('requestfailed',lambda r:report['failed_resources'].append(r.url))
   page.goto(URL);page.wait_for_function('window.Changban')
   layout=page.evaluate('''() => ({width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,small:[...document.querySelectorAll('button,a')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{let r=e.getBoundingClientRect();return r.height<43.9||r.width<43.9}).map(e=>({text:e.textContent,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})),cell:document.querySelector('#board').getBoundingClientRect().width/(innerWidth>650?9:6)})''')
+  if w<=650:
+   bounds=page.evaluate('''() => ({height:visualViewport.height,scroll:scrollY,board:document.querySelector('#board').getBoundingClientRect().bottom,controls:document.querySelector('.battle-controls').getBoundingClientRect().bottom,shop:document.querySelector('#shop').getBoundingClientRect().bottom})''')
+   check(str(w)+'x'+str(h)+' full board and controls fit visible height',bounds['scroll']==0 and max(bounds['board'],bounds['controls'],bounds['shop'])<=bounds['height'])
+   click(page,'#inspect');check('strategy drawer pauses game',snap(page)['paused']);click(page,'#closeStrategy');check('closing strategy restores play state',not snap(page)['paused'])
+   click(page,'#chapters');check('chapter menu fits visible viewport',page.locator('#modal').bounding_box()['y']+page.locator('#modal').bounding_box()['height']<=h);click(page,'#closeChapters')
   report['layout'].append(layout);check(str(w)+'px no overflow, touch targets >=44px',not layout['overflow'] and not layout['small'] and layout['cell']>=44)
   click(page,'#help');check('help pauses game',snap(page)['paused']);click(page,'#closeHelp');check('closing help restores pause state',not snap(page)['paused'])
   if w==1440:
    page.locator('#board').focus();page.keyboard.press('1');page.keyboard.press('Enter');check('keyboard placement works',len(snap(page)['towers'])==1)
    page.keyboard.press('ArrowRight');check('keyboard grid announces coordinates',bool(page.locator('#boardAccess').inner_text()))
   page.screenshot(path=str(OUT/f'layout-{w}.png'),full_page=True);context.close()
- context=browser.new_context(viewport={'width':390,'height':844},has_touch=True,device_scale_factor=1)
+ context=browser.new_context(viewport={'width':390,'height':700},has_touch=True,device_scale_factor=1)
  page=context.new_page();page.on('pageerror',lambda e:report['errors'].append(str(e)));page.on('requestfailed',lambda r:report['failed_resources'].append(r.url))
  page.goto(URL);page.wait_for_function('window.Changban')
  check('later levels begin locked',page.locator('[data-level="1"]').is_disabled())
  cell(page,2,2);cell(page,4,2);check('touch places two bow units',len(snap(page)['towers'])==2)
+ state=snap(page);page.set_viewport_size({'width':390,'height':620});page.wait_for_timeout(150)
+ check('browser toolbar height change preserves army',snap(page)['gold']==state['gold'] and snap(page)['towers']==state['towers'])
+ check('resized controls still fit',page.locator('#shop').bounding_box()['y']+page.locator('#shop').bounding_box()['height']<=620)
+ page.set_viewport_size({'width':390,'height':700});page.wait_for_timeout(150)
  a=locate(page,2,2);b=locate(page,4,2);cdp=context.new_cdp_session(page)
  cdp.send('Input.dispatchTouchEvent',{'type':'touchStart','touchPoints':[{'x':a[0],'y':a[1]}]})
  for i in range(1,7):cdp.send('Input.dispatchTouchEvent',{'type':'touchMove','touchPoints':[{'x':a[0]+(b[0]-a[0])*i/6,'y':a[1]+(b[1]-a[1])*i/6}]})

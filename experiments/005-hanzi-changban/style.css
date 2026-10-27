@@ -9,3 +9,32 @@
 /* All interactive targets, including the narrow-screen header, remain 44px. */
 .gallery-link{min-width:44px}.icon-btn,.help-btn{min-width:44px}
 @media(max-width:650px){.unit-card b{font-size:12px}.unit-card small{font-size:9px}.unit-card .price{font-size:11px}.topbar nav{gap:2px}.icon-btn,.help-btn{width:44px}}
+
+/* The phone battlefield fits the visual viewport, including expanded browser chrome. */
+.chapters-btn,.inspect-btn{display:none}
+dialog{max-height:calc(var(--viewport-height,100svh) - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow:auto;overscroll-behavior:contain}
+.chapter-choices{display:grid;gap:6px}.chapter-choices button{min-height:44px;text-align:left;padding:10px;background:#e8ecdc;border:1px solid #cbd6bd}.chapter-choices span{float:right;font-size:10px;color:#8c9a7e}.drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.drawer-heading h2{font-size:21px}.drawer-heading button{min-width:80px;min-height:44px;background:#e0e7d5;border-radius:4px;font-size:12px}.strategy-view{padding:12px 16px}.strategy-view .strategy{margin:0;border:0;padding:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px}.strategy-view .strategy-title{display:none}.strategy-view .selection{grid-column:1;grid-row:1;padding:0}.strategy-view .hero-card{grid-column:2;grid-row:1;margin:0}.strategy-view .fair-note{grid-column:1/-1}.strategy-view .tips{display:none}
+@media(max-width:650px){
+ body{padding:0 0 env(safe-area-inset-bottom,0px)}
+ .topbar{height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 8px 0;gap:4px}
+ .brand{font-size:15px;gap:7px;letter-spacing:0;white-space:nowrap}.brand small{display:none}.brand .seal{width:26px;height:30px;font-size:21px}
+ .topbar nav{gap:2px}.topbar .gallery-link{display:none}.chapters-btn{display:block;min-height:44px;min-width:54px;padding:0 4px;background:transparent;font-size:11px;color:#597353}
+ .shell{display:block;padding:4px 8px;margin:0;height:calc(var(--viewport-height,100svh) - 48px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+ .campaign,.battle-heading,.recruit-title,.bottom-note,.shell>.strategy,.page-footer{display:none}
+ .battle{height:100%;min-height:542px;display:flex;flex-direction:column}
+ .battlefield{flex:1;min-height:486px;display:flex;flex-direction:column}
+ .battle-hud{height:44px;min-height:44px;padding:0 10px;flex:none}.resource small{font-size:8px;margin-bottom:2px}.resource strong{font-size:19px}
+ .board-wrap{flex:1;min-height:396px;aspect-ratio:auto;display:flex;align-items:center;justify-content:center}
+ .board-wrap canvas{flex:none;max-width:100%;aspect-ratio:6/9}
+ .battle-controls{height:44px;min-height:44px;flex:none;padding:0 4px;gap:4px;flex-wrap:nowrap}
+ .skill-btn{width:70px;min-width:70px;min-height:44px;gap:4px}.skill-btn>span{width:28px;height:30px;font-size:18px;flex:none}.skill-btn>div{font-size:10px;white-space:nowrap}.skill-btn small,.skill-btn kbd{display:none}
+ .play-controls{gap:4px;margin-left:auto}.square-btn{height:44px;width:44px}.primary{height:44px;min-width:112px;padding:8px 6px}
+ .shop{grid-template-columns:repeat(4,minmax(0,1fr)) 44px;gap:4px;margin-top:4px;height:52px;flex:none}
+ .unit-card{display:flex;align-items:center;justify-content:center;height:52px;min-height:44px;padding:3px;gap:2px}
+ .unit-card .unit-glyph{height:31px;width:23px;font-size:24px;background:transparent;margin:0;flex:none}.unit-card b{font-size:10px;white-space:nowrap}.unit-card small{display:none}.unit-card .price{font-size:10px;margin-top:2px;white-space:nowrap}
+ .inspect-btn{display:block;border:1px solid #becbad;background:#e0e7d5;color:#486448;min-width:44px;min-height:44px;font-size:11px;border-radius:4px}
+ .strategy-view .selection>p,.strategy-view .hero-card p{font-size:10px}.strategy-view .selection-actions{flex-wrap:wrap}.strategy-view .selection-actions button{flex-basis:100%;font-size:11px}
+}
+@media(max-width:360px){.brand{font-size:14px;gap:5px}.topbar .icon-btn,.topbar .help-btn{width:44px}.unit-card b{font-size:9px}.strategy-view{padding:10px}.strategy-view .strategy{gap:10px}}
+.modal-actions button{min-height:44px}.inspect-btn.has-selection{background:#305a49;color:#fffae9;border-color:#305a49}
+@media(max-width:650px){dialog{top:calc(8px + env(safe-area-inset-top,0px));bottom:auto;margin:0 auto}}
