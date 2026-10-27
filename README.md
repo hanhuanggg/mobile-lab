@@ -14,7 +14,7 @@
 python3 -m http.server 8000 --bind 0.0.0.0
 ```
 
-首页为 `/`，模板为 `/experiments/000-template/`。使用任意静态服务器均可，也可部署到 GitHub Pages 等静态托管服务。仓库尚未配置或发布线上站点。
+首页为 `/`，模板为 `/experiments/000-template/`。使用任意静态服务器均可。线上陈列馆为 [hanhuanggg.github.io/mobile-lab](https://hanhuanggg.github.io/mobile-lab/)，GitHub Pages 使用 `main` 分支根目录发布。
 
 观影实验 003 需要拖动视频进度时，本地可改用 `python3 experiments/003-the-machine-dreams/serve.py --port 8000`；它同时提供整个陈列馆，并支持 MP4 分段请求。
 
@@ -28,6 +28,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
+- [`experiments/005-hanzi-changban/`](experiments/005-hanzi-changban/)：无广告、无付费、无 PK 的汉字合成塔防，六章关卡、拼字召将和舍将护主。
 - [`experiments/003-the-machine-dreams/`](experiments/003-the-machine-dreams/)：15 秒连续空间视觉短片，包含可直接播放的 MP4 和完整 HyperFrames 项目。
 - [`experiments/004-chopper-not-happy/`](experiments/004-chopper-not-happy/)：乔巴《才没有高兴呢！》15 秒原创三维同人短片，含中文对白、MP4 和完整制作源码。
 - `ideas/inbox.md`：随手记录的念头。
