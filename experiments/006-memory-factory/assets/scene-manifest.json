@@ -1,0 +1,304 @@
+{
+  "version": 2,
+  "style": "Original flat vector educational scenes",
+  "backgrounds": [
+    {
+      "page": 1,
+      "theme": "hub",
+      "file": "assets/backgrounds/background-01.svg"
+    },
+    {
+      "page": 2,
+      "theme": "campus",
+      "file": "assets/backgrounds/background-02.svg"
+    },
+    {
+      "page": 3,
+      "theme": "memory",
+      "file": "assets/backgrounds/background-03.svg"
+    },
+    {
+      "page": 4,
+      "theme": "lab",
+      "file": "assets/backgrounds/background-04.svg"
+    },
+    {
+      "page": 5,
+      "theme": "classroom",
+      "file": "assets/backgrounds/background-05.svg"
+    },
+    {
+      "page": 6,
+      "theme": "lab",
+      "file": "assets/backgrounds/background-06.svg"
+    },
+    {
+      "page": 7,
+      "theme": "hub",
+      "file": "assets/backgrounds/background-07.svg"
+    },
+    {
+      "page": 8,
+      "theme": "lab",
+      "file": "assets/backgrounds/background-08.svg"
+    },
+    {
+      "page": 9,
+      "theme": "classroom",
+      "file": "assets/backgrounds/background-09.svg"
+    },
+    {
+      "page": 10,
+      "theme": "bench",
+      "file": "assets/backgrounds/background-10.svg"
+    },
+    {
+      "page": 11,
+      "theme": "bench",
+      "file": "assets/backgrounds/background-11.svg"
+    },
+    {
+      "page": 12,
+      "theme": "library",
+      "file": "assets/backgrounds/background-12.svg"
+    },
+    {
+      "page": 13,
+      "theme": "lab",
+      "file": "assets/backgrounds/background-13.svg"
+    },
+    {
+      "page": 14,
+      "theme": "study",
+      "file": "assets/backgrounds/background-14.svg"
+    },
+    {
+      "page": 15,
+      "theme": "study",
+      "file": "assets/backgrounds/background-15.svg"
+    },
+    {
+      "page": 16,
+      "theme": "memory",
+      "file": "assets/backgrounds/background-16.svg"
+    },
+    {
+      "page": 17,
+      "theme": "library",
+      "file": "assets/backgrounds/background-17.svg"
+    },
+    {
+      "page": 18,
+      "theme": "library",
+      "file": "assets/backgrounds/background-18.svg"
+    },
+    {
+      "page": 19,
+      "theme": "classroom",
+      "file": "assets/backgrounds/background-19.svg"
+    },
+    {
+      "page": 20,
+      "theme": "study",
+      "file": "assets/backgrounds/background-20.svg"
+    },
+    {
+      "page": 21,
+      "theme": "lab",
+      "file": "assets/backgrounds/background-21.svg"
+    },
+    {
+      "page": 22,
+      "theme": "hub",
+      "file": "assets/backgrounds/background-22.svg"
+    }
+  ],
+  "scenes": [
+    {
+      "name": "hub",
+      "file": "assets/scenes/hub.svg",
+      "width": 1200,
+      "height": 500
+    },
+    {
+      "name": "stairs",
+      "file": "assets/scenes/stairs.svg",
+      "width": 600,
+      "height": 500
+    },
+    {
+      "name": "door",
+      "file": "assets/scenes/door.svg",
+      "width": 600,
+      "height": 500
+    },
+    {
+      "name": "memory-a",
+      "file": "assets/scenes/memory-a.svg",
+      "width": 600,
+      "height": 400
+    },
+    {
+      "name": "memory-b",
+      "file": "assets/scenes/memory-b.svg",
+      "width": 600,
+      "height": 400
+    },
+    {
+      "name": "factory",
+      "file": "assets/scenes/factory.svg",
+      "width": 1200,
+      "height": 400
+    },
+    {
+      "name": "students-four",
+      "file": "assets/scenes/students-four.svg",
+      "width": 1100,
+      "height": 310
+    },
+    {
+      "name": "hearing",
+      "file": "assets/scenes/hearing.svg",
+      "width": 400,
+      "height": 300
+    },
+    {
+      "name": "imagine",
+      "file": "assets/scenes/imagine.svg",
+      "width": 400,
+      "height": 300
+    },
+    {
+      "name": "draw",
+      "file": "assets/scenes/draw.svg",
+      "width": 400,
+      "height": 300
+    },
+    {
+      "name": "queue",
+      "file": "assets/scenes/queue.svg",
+      "width": 400,
+      "height": 300
+    },
+    {
+      "name": "recall",
+      "file": "assets/scenes/recall.svg",
+      "width": 400,
+      "height": 300
+    },
+    {
+      "name": "trace",
+      "file": "assets/scenes/trace.svg",
+      "width": 850,
+      "height": 480
+    },
+    {
+      "name": "sensory-pod",
+      "file": "assets/scenes/sensory-pod.svg",
+      "width": 480,
+      "height": 300
+    },
+    {
+      "name": "short-pod",
+      "file": "assets/scenes/short-pod.svg",
+      "width": 480,
+      "height": 300
+    },
+    {
+      "name": "long-pod",
+      "file": "assets/scenes/long-pod.svg",
+      "width": 480,
+      "height": 300
+    },
+    {
+      "name": "classroom-look",
+      "file": "assets/scenes/classroom-look.svg",
+      "width": 650,
+      "height": 440
+    },
+    {
+      "name": "packing",
+      "file": "assets/scenes/packing.svg",
+      "width": 1000,
+      "height": 300
+    },
+    {
+      "name": "library",
+      "file": "assets/scenes/library.svg",
+      "width": 900,
+      "height": 570
+    },
+    {
+      "name": "review",
+      "file": "assets/scenes/review.svg",
+      "width": 600,
+      "height": 520
+    },
+    {
+      "name": "teach",
+      "file": "assets/scenes/teach.svg",
+      "width": 740,
+      "height": 500
+    },
+    {
+      "name": "ordinary",
+      "file": "assets/scenes/ordinary.svg",
+      "width": 600,
+      "height": 360
+    },
+    {
+      "name": "achievement",
+      "file": "assets/scenes/achievement.svg",
+      "width": 600,
+      "height": 360
+    },
+    {
+      "name": "curiosity",
+      "file": "assets/scenes/curiosity.svg",
+      "width": 680,
+      "height": 500
+    },
+    {
+      "name": "discussion",
+      "file": "assets/scenes/discussion.svg",
+      "width": 760,
+      "height": 520
+    },
+    {
+      "name": "plan",
+      "file": "assets/scenes/plan.svg",
+      "width": 620,
+      "height": 530
+    },
+    {
+      "name": "review-mini",
+      "file": "assets/scenes/review-mini.svg",
+      "width": 400,
+      "height": 280
+    },
+    {
+      "name": "teach-mini",
+      "file": "assets/scenes/teach-mini.svg",
+      "width": 400,
+      "height": 280
+    },
+    {
+      "name": "reward-mini",
+      "file": "assets/scenes/reward-mini.svg",
+      "width": 400,
+      "height": 280
+    },
+    {
+      "name": "ask-mini",
+      "file": "assets/scenes/ask-mini.svg",
+      "width": 400,
+      "height": 280
+    },
+    {
+      "name": "safety",
+      "file": "assets/scenes/safety.svg",
+      "width": 600,
+      "height": 200
+    }
+  ]
+}

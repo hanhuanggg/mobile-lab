@@ -28,7 +28,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
-- [`experiments/006-memory-factory/`](experiments/006-memory-factory/)：大脑“记忆”工厂，22页可编辑初中心理健康课件、PDF、逐页预览及PptxGenJS源码。
+- [`experiments/006-memory-factory/`](experiments/006-memory-factory/)：大脑“记忆”工厂，22页场景插画增强版课件、PDF、逐页预览及PptxGenJS源码。
 - [`experiments/005-hanzi-changban/`](experiments/005-hanzi-changban/)：无广告、无付费、无 PK 的汉字合成塔防，六章关卡、拼字召将和舍将护主。
 - [`experiments/003-the-machine-dreams/`](experiments/003-the-machine-dreams/)：15 秒连续空间视觉短片，包含可直接播放的 MP4 和完整 HyperFrames 项目。
 - [`experiments/004-chopper-not-happy/`](experiments/004-chopper-not-happy/)：乔巴《才没有高兴呢！》15 秒原创三维同人短片，含中文对白、MP4 和完整制作源码。
