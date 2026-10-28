@@ -1,0 +1,21 @@
+{
+  "slides": 22,
+  "aspectRatio": "16:9",
+  "durationSeconds": 2400,
+  "teacherNotes": 22,
+  "nativeObjects": 849,
+  "svgPictureObjects": 97,
+  "nativeObjectPercentage": 89.7,
+  "nativeEditableCharts": 1,
+  "embeddedChartWorkbooks": 1,
+  "outOfBoundsObjects": [],
+  "undersizedContentText": [],
+  "genuinePngFallbacks": 97,
+  "xmlPartsParsed": 56,
+  "pdfPagesRendered": 22,
+  "previewPNGs": 22,
+  "contactSheets": 4,
+  "visualReview": "All 22 pages reviewed; slides 06, 14, 15 and 18 revised and re-rendered.",
+  "renderEngine": "LibreOffice Impress 25.2.3; PyMuPDF 1.5x rasterization",
+  "powerPointDesktopTested": false
+}

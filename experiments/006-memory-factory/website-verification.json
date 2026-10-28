@@ -1,0 +1,24 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "horizontalOverflow": false,
+      "navigation": "next, previous, arrows, thumbnail 22, reset passed"
+    },
+    {
+      "width": 390,
+      "horizontalOverflow": false,
+      "navigation": "next, previous, arrows, thumbnail 22, reset passed"
+    },
+    {
+      "width": 1440,
+      "horizontalOverflow": false,
+      "navigation": "next, previous, arrows, thumbnail 22, reset passed"
+    }
+  ],
+  "javascriptErrors": [],
+  "httpErrors": [],
+  "all22PreviewImages": "200 OK",
+  "pptxPdfAndReadme": "200 OK",
+  "galleryLinkAndCount": "passed"
+}
