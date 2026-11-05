@@ -28,6 +28,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
+- [`experiments/007-lian-shenme/`](experiments/007-lian-shenme/)：练什么，React + TypeScript 极简健身训练 PWA，含计划编辑、逐组记录、IndexedDB 持久化与 JSON 备份。目录内已包含可直接访问的构建产物，源码开发说明见该目录 README。
 - [`experiments/006-memory-factory/`](experiments/006-memory-factory/)：大脑“记忆”工厂，22页场景插画增强版课件、PDF、逐页预览及PptxGenJS源码。
 - [`experiments/005-hanzi-changban/`](experiments/005-hanzi-changban/)：无广告、无付费、无 PK 的汉字合成塔防，六章关卡、拼字召将和舍将护主。
 - [`experiments/003-the-machine-dreams/`](experiments/003-the-machine-dreams/)：15 秒连续空间视觉短片，包含可直接播放的 MP4 和完整 HyperFrames 项目。

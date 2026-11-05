@@ -1,0 +1,1 @@
+{"name":"练什么 · 极简训练记录","short_name":"练什么","description":"打开就知道今天练什么。计划、记录、保存，都在本地。","start_url":"./","display":"standalone","background_color":"#171b18","theme_color":"#171b18","lang":"zh-CN","scope":"./","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
