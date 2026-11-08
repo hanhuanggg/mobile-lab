@@ -28,6 +28,7 @@ python3 -m http.server 8000 --bind 0.0.0.0
 
 - `index.html`：实验陈列馆。
 - `experiments/`：独立作品，`000-template` 为最小起点。
+- [`experiments/008-borderline/`](experiments/008-borderline/)：边境防线，TypeScript + Phaser 3 原创战术塔防；8 种干员、双线 3 波攻势、技能与完整结算。已包含静态构建，可直接通过 GitHub Pages 打开。在仓库根运行 `npm install`、`npm run dev` 开发，`npm run build` 更新静态版本。详情见目录内 README。
 - [`experiments/007-lian-shenme/`](experiments/007-lian-shenme/)：练什么，React + TypeScript 极简健身训练 PWA，含计划编辑、逐组记录、IndexedDB 持久化与 JSON 备份。目录内已包含可直接访问的构建产物，源码开发说明见该目录 README。
 - [`experiments/006-memory-factory/`](experiments/006-memory-factory/)：大脑“记忆”工厂，22页场景插画增强版课件、PDF、逐页预览及PptxGenJS源码。
 - [`experiments/005-hanzi-changban/`](experiments/005-hanzi-changban/)：无广告、无付费、无 PK 的汉字合成塔防，六章关卡、拼字召将和舍将护主。

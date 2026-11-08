@@ -1,0 +1,11 @@
+{
+  "name": "mobile-lab",
+  "private": true,
+  "workspaces": ["experiments/008-borderline"],
+  "scripts": {
+    "dev": "npm run dev --workspace=@mobile-lab/borderline",
+    "build": "npm run build --workspace=@mobile-lab/borderline",
+    "test": "npm run test --workspace=@mobile-lab/borderline",
+    "test:e2e": "npm run test:e2e --workspace=@mobile-lab/borderline"
+  }
+}
