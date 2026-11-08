@@ -23,4 +23,50 @@
 @media(max-width:360px) and (orientation:portrait){.home-header nav{gap:8px}.home-header nav>button{font-size:8px}.brand-word{font-size:17px}.brand{gap:6px}.brand-mark{width:23px;height:29px}.home-header{margin-inline:5%}.home-header .icon-button{width:28px}.hero-copy h1{font-size:66px}.hero-copy .eyebrow{font-size:6px}.hero-copy{top:17%;left:7%}.hero-kicker{font-size:9px}.start-button{width:250px}.hero-description{margin:19px 0 22px}.mission-preview{left:7%;width:86%;bottom:76px}.home{min-height:720px}.start-note{font-size:6px}}
 #battlefield{display:block}.pause-overlay{pointer-events:none}.pause-overlay button{pointer-events:auto}
 @media(max-width:900px){.mission-brand{min-height:44px}.battle-controls .icon-button,.speed-button,.pause-button{min-width:44px;min-height:44px}.panel-heading button{min-width:44px;min-height:44px;margin:-14px -12px -12px 0}.skill-button,.retreat-button{min-height:44px}.field-bottom>button{position:relative}.field-bottom>button:before{content:'';position:absolute;inset:-11px 0}.direction-actions{min-height:44px}.direction-actions>button:first-child{min-width:44px}.compass{grid-template:repeat(3,44px)/repeat(3,44px);width:132px}}
+.battle-shell{height:var(--viewport-height,100dvh);min-height:0}
+#battlefield{position:absolute;inset:0;touch-action:none}
+#battlefield canvas{touch-action:none}
+.direction-picker{transform:translate(-50%,-50%)}
+@media(max-height:500px) and (orientation:landscape){
+  .home{height:var(--viewport-height,100dvh);min-height:0}
+  .home-header{height:46px}.home-footer{height:24px}.hero-copy{top:65px;left:6%;width:54%}
+  .hero-kicker,.hero-description,.english-title{display:none}.hero-copy h1{font-size:44px;line-height:1.05;margin:12px 0 17px}
+  .hero-copy .eyebrow{font-size:7px}.start-button{width:235px;min-height:58px}.start-note{font-size:7px;margin-top:9px}
+  .mission-preview{bottom:45px}.character-caption{display:none}
+  .battle-header{height:44px;min-height:44px;padding:0 10px}.mission-brand{min-width:112px;min-height:44px;gap:7px}
+  .mission-brand small{display:none}.mission-brand>span+span{font-size:12px}.mission-brand .brand-mark{width:21px;height:26px}
+  .battle-controls{gap:4px}.battle-controls .icon-button,.speed-button,.pause-button{width:44px;height:44px;min-width:44px;min-height:44px;margin:0}
+  #help{display:none}.battle-stats{gap:19px}.stat{min-width:0;gap:6px}.stat>div{display:flex;align-items:baseline;gap:3px}
+  .stat small{display:none}.stat>svg{width:17px;height:17px}.stat strong{font-size:24px}.stat em{font-size:8px;margin:0}
+  .field-wrap{padding:0 6px}.field-heading{height:18px;min-height:18px;padding:0 5px;font-size:8px}
+  .field-clock{font-size:7px}.field-clock b{font-size:9px}.field-bottom,.battle-footer{display:none}
+  .canvas-wrap{max-width:none}.canvas-wrap:before,.canvas-wrap:after{width:10px;height:10px}
+  .deployment{height:72px;min-height:72px;padding:5px 10px;gap:8px}.deployment-intro{display:none}
+  .operator-deck{height:62px;gap:5px}.operator-card img{height:59px;top:-5px}.card-role,.card-name>span{display:none}
+  .card-name{font-size:11px;left:5px;bottom:5px;letter-spacing:.04em}.card-cost{font-size:19px;top:1px;right:4px}
+  .card-index{font-size:6px;top:3px;left:4px}.card-bottom{height:2px}.card-status{bottom:22px;right:3px;font-size:7px}
+  .card-status.cooling{inset:4px 0 22px;font-size:16px}.dp-reserve{min-width:74px;padding-left:8px}
+  .dp-reserve>span{font-size:8px}.dp-reserve>strong{font-size:34px;line-height:.9;margin:3px 0 4px}.dp-reserve>small{font-size:6px;margin-top:4px}
+  .unit-panel{width:220px;bottom:5px;left:5px;padding:8px 10px}.unit-panel.deployment-info{display:none}
+  .panel-heading{height:10px;font-size:7px}.panel-heading button{position:absolute;right:0;top:0;width:44px;height:44px;margin:0}
+  .panel-title{margin:4px 0 5px}.panel-title h2{font-size:18px}.panel-title>span{margin-right:22px;font-size:8px}
+  .panel-trait,.skill-description{display:none}.panel-hp{font-size:7px}.panel-hp-track{height:2px;margin-top:3px}
+  .panel-skill{padding-top:5px;margin-top:6px}.panel-skill>span{font-size:10px}.panel-skill>small{font-size:7px}
+  .skill-track{margin-top:5px;margin-bottom:6px}.skill-button,.retreat-button{min-height:44px;font-size:10px}
+  .direction-picker{width:240px;padding:6px;background:#14232df5;border:1px solid #c9b68180;transform:translate(-50%,-50%)}
+  .direction-label{font-size:9px;padding:3px;background:none}.compass{grid-template:44px/repeat(4,44px);gap:4px;width:188px;margin:4px auto 6px}
+  .compass:before,.compass-center{display:none}.direction.up,.direction.left,.direction.right,.direction.down{grid-area:auto}
+  .direction-actions{height:44px;min-height:44px}.direction-actions>button:last-child{font-size:11px}.direction-actions>button:first-child{width:44px}
+  #toast{bottom:80px;padding:8px 14px;font-size:10px}.pause-overlay{padding:12px 20px}.pause-overlay h2{font-size:23px;margin:7px 0}
+  .pause-overlay button{height:44px;min-height:44px;margin-top:8px}.pause-overlay p{font-size:8px}.wave-banner{min-width:280px;padding:9px 25px}
+}
+@media(max-height:500px) and (max-width:700px) and (orientation:landscape){
+  .mission-preview{display:none}.hero-copy{width:88%}.battle-stats{gap:10px}.stat>svg{width:14px;height:14px}.stat strong{font-size:21px}
+  .battle-header{padding:0 6px;gap:4px}.mission-brand{min-width:100px}.battle-controls{gap:1px}.field-clock>span{display:none}
+}
+@media(max-height:330px) and (orientation:landscape){
+  .field-heading{display:none}.deployment{height:64px;min-height:64px}.operator-deck{height:54px}
+  .operator-card img{height:51px;top:-5px}.card-cost{font-size:17px}.card-name{font-size:10px;bottom:4px}
+  .dp-reserve>strong{font-size:29px;margin:2px 0 3px}.dp-reserve>small{margin-top:3px}#toast{bottom:72px}
+}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}

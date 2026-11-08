@@ -15,13 +15,14 @@ const sound=new Sound();sound.enabled=saved.sound;
 let battle:Battle|null=null,game:Phaser.Game|null=null,scene:Battlefield|null=null;
 let selectedKind:UnitKind|null=null,selectedId:number|null=null,pending:Cell|null=null,direction:Direction='right';
 let previousUpdate=0,run=0,resultScheduled=false,toastTimer=0;
+let fieldObserver:ResizeObserver|null=null;
 const $=<T extends HTMLElement=HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const time=(seconds:number)=>`${Math.floor(seconds/60).toString().padStart(2,'0')}:${Math.floor(seconds%60).toString().padStart(2,'0')}`;
 const logo=`<span class="brand-mark">${icon('shield')}</span><span class="brand-word">BORDER<span>LINE</span><small>边 境 防 线</small></span>`;
 function audioButton(){return `<button class="icon-button sound-toggle" aria-label="${saved.sound?'关闭':'开启'}音效" title="音效">${icon(saved.sound?'sound':'mute')}</button>`;}
 function bindAudio(){document.querySelectorAll('.sound-toggle').forEach(btn=>btn.addEventListener('click',()=>{saved.sound=!saved.sound;sound.enabled=saved.sound;sound.unlock();sound.play('click');persist();document.querySelectorAll('.sound-toggle').forEach(el=>{el.innerHTML=icon(saved.sound?'sound':'mute');el.setAttribute('aria-label',`${saved.sound?'关闭':'开启'}音效`);});}));}
 function home(){
-  run++;game?.destroy(true);game=null;scene=null;battle=null;
+  run++;fieldObserver?.disconnect();fieldObserver=null;game?.destroy(true);game=null;scene=null;battle=null;
   app.innerHTML=`<main class="home"><div class="home-art"></div><div class="home-grain"></div>
     <header class="home-header"><a href="../../" class="brand" aria-label="返回作品陈列馆">${logo}</a><nav><span class="nav-active">作战终端<i></i></span><button id="manual">作战手册</button><button id="records">行动记录</button></nav><div class="header-end"><span class="connection"><i></i> 终端已连接</span>${audioButton()}</div></header>
     <section class="hero-copy"><div class="eyebrow"><span class="tiny-square"></span> FRONTIER DEFENSE INITIATIVE <span class="copy-code">/ 008</span></div>
@@ -37,12 +38,12 @@ function home(){
   $('#start').onclick=()=>{sound.unlock();sound.play('deploy');start();};$('#manual').onclick=()=>manual();$('#records').onclick=()=>records();bindAudio();
 }
 function start(){
-  run++;resultScheduled=false;manualPause=false;orientationPause=false;game?.destroy(true);battle=new Battle();selectedKind=null;selectedId=null;pending=null;previousUpdate=0;
+  run++;resultScheduled=false;manualPause=false;orientationPause=false;fieldObserver?.disconnect();fieldObserver=null;game?.destroy(true);battle=new Battle();selectedKind=null;selectedId=null;pending=null;previousUpdate=0;
   saved.attempts++;persist();
   app.innerHTML=`<main class="battle-shell">
     <header class="battle-header"><button id="exit" class="mission-brand" aria-label="返回指挥终端"><span class="brand-mark">${icon('shield')}</span><span><small>OPERATION 01</small>边境防线</span></button>
       <div class="battle-stats"><div class="stat lives">${icon('shield')}<div><small>防线完整度</small><strong id="lives">03</strong><em>/ 03</em></div></div><div class="stat kills">${icon('crosshair')}<div><small>已歼灭目标</small><strong id="kills">00</strong><em>/ ${TOTAL_ENEMIES}</em></div></div><div class="stat wave-stat">${icon('flag')}<div><small>当前攻势</small><strong id="wave">01</strong><em>/ 03</em></div></div></div>
-      <div class="battle-controls">${audioButton()}<button id="help" class="icon-button" aria-label="作战手册">${icon('help')}</button><button id="speed" class="speed-button" aria-label="切换战斗速度">1<span>×</span></button><button id="pause" class="pause-button" aria-label="暂停作战">${icon('pause')}</button></div>
+      <div class="battle-controls">${audioButton()}<button id="help" class="icon-button" aria-label="作战手册">${icon('help')}</button><button id="fullscreen" class="icon-button" aria-label="全屏作战" title="全屏作战">${icon('fullscreen')}</button><button id="speed" class="speed-button" aria-label="切换战斗速度">1<span>×</span></button><button id="pause" class="pause-button" aria-label="暂停作战">${icon('pause')}</button></div>
     </header>
     <section class="field-wrap" aria-label="战术战场"><div class="field-heading"><div><span class="live-dot"></span><span id="phase-label">第一波 / 基础防守</span></div><div class="field-clock">作战时间 <b id="timer">00:00</b><span>／</span><span id="field-status">作战进行中</span></div></div>
       <div class="canvas-wrap"><div id="battlefield" role="application" aria-label="12×7 战场，点击干员卡片后选择格子和方向部署" tabindex="0"></div><div class="field-vignette"></div><div id="unit-panel" class="unit-panel" hidden></div><div id="direction-picker" class="direction-picker" hidden></div><div id="wave-banner" class="wave-banner" hidden></div><div id="pause-overlay" class="pause-overlay" hidden></div></div>
@@ -53,10 +54,17 @@ function start(){
     </section><footer class="battle-footer"><a href="../../">POCKET CREATIVE LAB</a><span>点击部署 · 选择朝向 · 守住防线</span><span><kbd>SPACE</kbd> 暂停 <b>／</b> <kbd>1–8</kbd> 选择干员</span></footer>
     </main><div class="orientation-hint"><span>↻</span><h2>旋转，进入战场。</h2><p>横屏可以看清每一条防线。<br>旋转设备后，作战将自动恢复。</p><button id="portrait-home">返回指挥终端</button><small>BORDERLINE / TACTICAL VIEW</small></div><div id="modal-root"></div><div id="toast" role="status" aria-live="polite"></div>`;
   scene=new Battlefield(battle,onCell,updateUI,onEvent);
-  game=new Phaser.Game({type:Phaser.AUTO,parent:'battlefield',width:VIEW_W,height:VIEW_H,backgroundColor:'#161e24',scene:[scene],render:{antialias:true,roundPixels:false},scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.NO_CENTER},input:{activePointers:2},audio:{noAudio:true}});
+  game=new Phaser.Game({type:Phaser.CANVAS,parent:'battlefield',width:VIEW_W,height:VIEW_H,backgroundColor:'#161e24',scene:[scene],render:{antialias:true,roundPixels:false},scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.NO_CENTER},input:{activePointers:2},audio:{noAudio:true}});
+  fieldObserver=new ResizeObserver(()=>{
+    if(!game?.isBooted)return;
+    const bounds=$('#battlefield').getBoundingClientRect(),w=Math.max(1,Math.round(bounds.width)),h=Math.max(1,Math.round(bounds.height));
+    if(game.scale.width!==w||game.scale.height!==h){game.scale.getParentBounds();game.scale.resize(w,h);}
+    game.scale.updateBounds();
+    if(pending)renderDirection();
+  });fieldObserver.observe($('#battlefield'));
   document.querySelectorAll<HTMLButtonElement>('.operator-card').forEach(btn=>btn.onclick=()=>choose(btn.dataset.kind as UnitKind));
   $('#pause').onclick=()=>togglePause();$('#speed').onclick=()=>{if(!battle)return;battle.speed=battle.speed===1?2:1;$('#speed').innerHTML=`${battle.speed}<span>×</span>`;sound.play('click');};
-  $('#restart').onclick=()=>confirmRestart();$('#exit').onclick=()=>confirmExit();$('#portrait-home').onclick=()=>home();$('#help').onclick=()=>manual();bindAudio();orientation();
+  $('#restart').onclick=()=>confirmRestart();$('#exit').onclick=()=>confirmExit();$('#portrait-home').onclick=()=>home();$('#help').onclick=()=>manual();$('#fullscreen').onclick=toggleFullscreen;bindAudio();orientation();
   toast('行动开始 · 先部署先锋建立防线与费用收入',4200);
 }
 function sync(){if(scene){scene.selectedKind=selectedKind;scene.selectedId=selectedId;scene.pending=pending;scene.direction=direction;}}
@@ -64,6 +72,7 @@ function choose(kind:UnitKind){
   if(!battle||battle.status!=='playing')return;
   selectedKind=selectedKind===kind&&!pending?null:kind;selectedId=null;pending=null;$('#direction-picker').hidden=true;sync();renderPanel();sound.play('click');
   if(selectedKind){const reason=battle.availability(kind);if(reason)toast(reason);$('#hint').textContent=`${UNITS[kind].name} · ${UNITS[kind].terrain==='high'?'点击高亮高台':'点击高亮地面'}，然后选择攻击方向`;}else $('#hint').textContent='选择干员或点击已部署单位。';
+  if(selectedKind&&!battle.availability(kind)&&window.matchMedia('(max-height: 500px) and (orientation: landscape)').matches)toast($('#hint').textContent!,1800);
   updateUI(true);
 }
 function onCell(cell:Cell){
@@ -78,22 +87,29 @@ function renderDirection(){
   if(!pending||!selectedKind)return;
   const p=project(pending.x,pending.y,terrain(pending.x,pending.y)==='high'),picker=$('#direction-picker');
   const canvas=document.querySelector('canvas')!.getBoundingClientRect(),wrap=$('.canvas-wrap').getBoundingClientRect();
-  picker.hidden=false;picker.style.left=`${Math.min(wrap.width-90,Math.max(90,canvas.left-wrap.left+p.x/VIEW_W*canvas.width))}px`;picker.style.top=`${Math.min(wrap.height-85,Math.max(70,canvas.top-wrap.top+p.y/VIEW_H*canvas.height))}px`;
+  picker.hidden=false;
   picker.innerHTML=`<div class="direction-label">选择攻击方向</div><div class="compass">${(['up','left','right','down']as Direction[]).map(d=>`<button class="direction ${d} ${d===direction?'active':''}" data-dir="${d}" aria-label="朝${{up:'上',down:'下',left:'左',right:'右'}[d]}">${icon('chevron')}</button>`).join('')}<span class="compass-center">${icon('crosshair')}</span></div><div class="direction-actions"><button id="cancel-deploy" aria-label="取消部署">${icon('close')}</button><button id="confirm-deploy">确认部署 <b>−${UNITS[selectedKind].cost}</b></button></div>`;
   picker.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach(btn=>btn.onclick=()=>{direction=btn.dataset.dir as Direction;sync();renderDirection();sound.play('click');});
-  $('#cancel-deploy').onclick=()=>{pending=null;sync();picker.hidden=true;};$('#confirm-deploy').onclick=commitDeploy;
+  const compact=window.matchMedia('(max-height: 500px) and (orientation: landscape)').matches;
+  const width=picker.offsetWidth,height=picker.offsetHeight;
+  const x=compact?(p.x>VIEW_W/2?width/2+8:wrap.width-width/2-8):canvas.left-wrap.left+p.x/VIEW_W*canvas.width;
+  const y=compact?wrap.height/2:canvas.top-wrap.top+p.y/VIEW_H*canvas.height;
+  picker.style.left=`${Math.max(width/2+4,Math.min(wrap.width-width/2-4,x))}px`;
+  picker.style.top=`${Math.max(height/2+4,Math.min(wrap.height-height/2-4,y))}px`;
+  $('#cancel-deploy').onclick=()=>{pending=null;sync();picker.hidden=true;renderPanel();};$('#confirm-deploy').onclick=commitDeploy;
 }
 function commitDeploy(){
   if(!battle||!pending||!selectedKind)return;
   const reason=battle.availability(selectedKind);if(reason){toast(reason);return;}
   const u=battle.deploy(selectedKind,pending,direction);if(!u){toast('部署位置不可用，请重新选择');return;}
+  window.clearTimeout(toastTimer);$('#toast').classList.remove('visible');
   selectedKind=null;pending=null;selectedId=u.id;$('#direction-picker').hidden=true;$('#hint').textContent='点击已部署干员查看范围、释放技能或撤退。';sync();renderPanel();updateUI(true);
 }
 function renderPanel(){
   const panel=$('#unit-panel');if(!battle){panel.hidden=true;return;}
   const u=battle.units.find(u=>u.id===selectedId),kind=u?.kind??selectedKind;
   if(!kind){panel.hidden=true;return;}
-  const c=UNITS[kind];panel.hidden=!!pending;
+  const c=UNITS[kind];panel.hidden=!!pending;panel.classList.toggle('deployment-info',!u);
   panel.innerHTML=`<div class="panel-heading"><span>${c.role}</span><button id="close-panel" aria-label="关闭干员信息">${icon('close')}</button></div><div class="panel-title"><h2>${c.name}</h2><span>${c.code}</span></div><div class="panel-hp"><span>HP <b id="unit-hp">${Math.ceil(u?.hp??c.hp)}</b> / ${c.hp}</span><span>${c.terrain==='high'?'高台':'地面'} · 阻挡 ${kind==='liberator'&&!u?.active?'0 / 3':c.block}</span></div><div class="panel-hp-track"><i id="unit-hp-fill"></i></div><p class="panel-trait">${c.trait}</p><div class="panel-skill"><span>${icon(kind==='medic'?'medical':'bolt')}<b>${c.skill}</b></span><small id="skill-state">${u?'充能中':'部署后充能'}</small></div><p class="skill-description">${c.description}</p><div class="skill-track"><i id="skill-progress"></i></div><div class="panel-actions">${u?`<button id="skill-button" class="skill-button">${icon('bolt')}<span>技能充能中</span><kbd>F</kbd></button><button id="retreat" class="retreat-button" title="撤退返还 ${Math.floor(c.cost/2)} DP">撤退<small>+${Math.floor(c.cost/2)} DP</small></button>`:`<span class="panel-deploy-note">${c.cost} DP <span>点击高亮格子部署 ${icon('arrow')}</span></span>`}</div>`;
   $('#close-panel').onclick=cancelSelection;
   if(u){$('#skill-button').onclick=activateSkill;$('#retreat').onclick=()=>{battle?.retreat(u.id);cancelSelection();toast(`干员撤退 · 返还 ${Math.floor(c.cost/2)} DP`);};}
@@ -123,7 +139,23 @@ function onEvent(e:GameEvent){
 let manualPause=false,orientationPause=false;
 function isPortrait(){return window.innerWidth<window.innerHeight&&window.innerWidth<700;}
 function orientation(){if(!battle)return;orientationPause=isPortrait();battle.paused=manualPause||orientationPause||!!document.querySelector('.modal');}
-window.addEventListener('resize',orientation);
+function viewportChanged(){
+  document.documentElement.style.setProperty('--viewport-height',`${Math.round(window.visualViewport?.height??window.innerHeight)}px`);
+  orientation();
+  if(pending)requestAnimationFrame(renderDirection);
+}
+window.addEventListener('resize',viewportChanged);
+window.visualViewport?.addEventListener('resize',viewportChanged);
+document.addEventListener('fullscreenchange',viewportChanged);
+viewportChanged();
+async function toggleFullscreen(){
+  try{
+    if(document.fullscreenElement)await document.exitFullscreen();
+    else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();
+    else toast('当前浏览器不支持全屏，可横屏继续作战');
+  }catch{toast('未进入全屏，当前横屏布局仍可正常操作');}
+  viewportChanged();
+}
 function togglePause(){if(!battle||battle.status!=='playing')return;manualPause=!manualPause;battle.paused=manualPause||orientationPause;const overlay=$('#pause-overlay');overlay.hidden=!manualPause;$('#pause').innerHTML=icon(manualPause?'play':'pause');$('#pause').setAttribute('aria-label',manualPause?'继续作战':'暂停作战');if(manualPause){overlay.innerHTML=`<small>TACTICAL HOLD</small><h2>行动暂停</h2><p>你仍可部署干员、查看范围并调整防线。</p><button id="resume">${icon('play')}继续作战</button>`;$('#resume').onclick=()=>togglePause();}sound.play('click');}
 function toast(message:string,duration=2400){const el=$('#toast');if(!el)return;window.clearTimeout(toastTimer);el.textContent=message;el.classList.add('visible');toastTimer=window.setTimeout(()=>el.classList.remove('visible'),duration);}
 let beforeModalPause=false;let focusBeforeModal:HTMLElement|null=null;

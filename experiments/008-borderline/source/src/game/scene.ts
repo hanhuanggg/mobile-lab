@@ -17,12 +17,26 @@ export class Battlefield extends Phaser.Scene {
   }
   create(){
     this.drawMap();this.highlight=this.add.graphics().setDepth(4);this.bars=this.add.graphics().setDepth(1000);
-    const resize=()=>{const {width,height}=this.scale;this.cameras.main.setOrigin(0,0).setViewport(0,0,width,height).setZoom(width/VIEW_W,height/VIEW_H);};resize();this.scale.on('resize',resize);this.events.once('shutdown',()=>this.scale.off('resize',resize));
+    this.syncViewport();
+    // Android can resize the canvas during rotation/context recovery before the
+    // scene receives a resize event. Keep the camera tied to its actual buffer.
+    const resize=()=>this.syncViewport();
+    this.sys.game.events.on(Phaser.Core.Events.PRE_RENDER,resize);
+    this.events.once('shutdown',()=>this.sys.game.events.off(Phaser.Core.Events.PRE_RENDER,resize));
     this.input.on('pointerdown',(pointer:Phaser.Input.Pointer)=>{
-      const world=this.cameras.main.getWorldPoint(pointer.x,pointer.y);
+      // Use the displayed canvas rectangle so touch coordinates also stay valid
+      // during browser-toolbar animation and before Phaser's next bounds refresh.
+      const event=pointer.event,point='changedTouches' in event?event.changedTouches[0]:event;
+      if(!point)return;
+      const bounds=this.sys.game.canvas.getBoundingClientRect();
+      const world={x:(point.clientX-bounds.left)*VIEW_W/bounds.width,y:(point.clientY-bounds.top)*VIEW_H/bounds.height};
       for(let y=ROWS-1;y>=0;y--)for(let x=COLS-1;x>=0;x--){if(Phaser.Geom.Polygon.Contains(new Phaser.Geom.Polygon(polygon(x,y)),world.x,world.y)){this.onCell({x,y});return;}}
     });
     this.cameras.main.fadeIn(450,15,21,25);
+  }
+  private syncViewport(){
+    const {width,height}=this.sys.game.canvas;
+    this.cameras.main.setOrigin(0,0).setScroll(0,0).setViewport(0,0,width,height).setZoom(width/VIEW_W,height/VIEW_H);
   }
   private label(x:number,y:number,text:string,size=11,color='#87969e'){return this.add.text(x,y,text,{fontFamily:'"Courier New", monospace',fontSize:size,color,letterSpacing:1}).setDepth(1);}
   private drawMap(){
@@ -105,7 +119,7 @@ export class Battlefield extends Phaser.Scene {
       const dx=friendly?(entity as Operator).direction==='left'?-4:4:0;
       sprite.setPosition(p.x+lean*dx,p.y+bob).setAngle(moving&&entity.kind==='runner'?4:lean*5).setDisplaySize(entity.kind==='elite'?73:57,(entity.kind==='elite'?92:72)*figureHeight).setDepth(10+p.y);
       sprite.setFlipX(friendly&&(entity as Operator).direction==='left');
-      sprite.setTint(entity.hit>0?0xffd1af:0xffffff);
+      sprite.setTint(entity.hit>0?0xffd1af:0xffffff).setAlpha(entity.hit>0?.6:1);
       this.shadows.get(entity.id)?.setPosition(p.x,p.y+2).setDepth(9+p.y);
       const hpMax=friendly?UNITS[entity.kind as UnitKind].hp:ENEMIES[entity.kind as EnemyKind].hp;
       const bw=32,by=p.y+6;this.bars.fillStyle(0x0a1219,.9);this.bars.fillRect(p.x-bw/2-1,by-1,bw+2,5);this.bars.fillStyle(friendly?0xa6c4b3:0xd59479);this.bars.fillRect(p.x-bw/2,by,bw*Math.max(0,entity.hp/hpMax),3);
